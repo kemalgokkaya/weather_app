@@ -34,7 +34,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
             ),
           ),
-          Text(state?.main?.temp.toString() ?? "boş")
+          Text(state?.main?.temp.toString() ?? "null")
         ],
       ),
     );
