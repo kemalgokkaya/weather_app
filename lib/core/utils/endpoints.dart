@@ -1,0 +1,1 @@
+String getWeatherCityURl(String city) => "$city/en";
