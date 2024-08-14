@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:weather_app/weather_app.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
-
   @override
   ConsumerState<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-  final List list1 = [1, 2, 3, 4, 5];
   final TextEditingController _textEditingController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    final contoller = ref.read(homeControllerProvider.notifier);
+    final controller = ref.read(homeControllerProvider.notifier);
     final state = ref.watch(homeControllerProvider);
+    final loadingState = ref.watch(homeControllerLoadingProvider);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -22,19 +23,29 @@ class _HomePageState extends ConsumerState<HomePage> {
       ),
       body: Column(
         children: [
-          TextField(
-            controller: _textEditingController,
-            decoration: InputDecoration(
-              hintText: "Enter City Name",
-              suffixIcon: IconButton(
-                onPressed: () {
-                  contoller.getWeather(_textEditingController.text);
+          TypeAheadField<String>(
+            itemBuilder: (context, suggestion) {
+              return ListTile(
+                title: Text(suggestion),
+              );
+            },
+            onSelected: (suggestion) {
+              ref.read(homeControllerLoadingProvider.notifier).state = true;
+              controller.getWeather(suggestion).then(
+                (data) {
+                  ref.read(homeControllerLoadingProvider.notifier).state =
+                      false;
                 },
-                icon: const Icon(Icons.search),
-              ),
-            ),
+              );
+            },
+            suggestionsCallback: (pattern) async {
+              return await controller.getCities(city: pattern);
+            },
           ),
-          Text(state?.main?.temp.toString() ?? "null")
+          if (loadingState)
+            const CircularProgressIndicator()
+          else
+            Text(state?.main?.feelsLike.toString() ?? ""),
         ],
       ),
     );
