@@ -1,1 +1,1 @@
-String getWeatherCityURl(String city) => "$city/en";
+String getWeatherCityURl(String city) => "$city/tr";
