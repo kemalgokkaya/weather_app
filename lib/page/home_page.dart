@@ -25,8 +25,9 @@ class _HomePageState extends ConsumerState<HomePage> {
           height: double.infinity,
           child: Container(
             color: Colors.transparent,
-            child: const WeatherSceneWidget(
-                weatherScene: WeatherScene.rainyOvercast),
+            child: WeatherSceneWidget(
+              weatherScene: _weatherScene(state),
+            ),
           ),
         ),
         Scaffold(
@@ -53,6 +54,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
           body: Column(
             children: [
+              Text(state?.weather?.first.description.toString() ?? ""),
               Container(
                 padding: const EdgeInsets.all(8),
                 margin: const EdgeInsets.all(8),
@@ -256,5 +258,16 @@ class _HomePageState extends ConsumerState<HomePage> {
         ),
       ],
     );
+  }
+
+  WeatherScene _weatherScene(WeatherModel? state) {
+    var data = state?.weather?.first.main;
+    WeatherScene result = WeatherScene.weatherEvery;
+    if (WeatherEnum.sunny.data == data) {
+      result = WeatherEnum.sunny.widget;
+    } else if (data == WeatherEnum.cloudy.data) {
+      result = WeatherEnum.cloudy.widget;
+    }
+    return result;
   }
 }
