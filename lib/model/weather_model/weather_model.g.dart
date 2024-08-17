@@ -8,46 +8,16 @@ part of 'weather_model.dart';
 
 _$WeatherModelImpl _$$WeatherModelImplFromJson(Map<String, dynamic> json) =>
     _$WeatherModelImpl(
-      coord: json['coord'] == null
+      location: json['location'] == null
           ? null
-          : Coord.fromJson(json['coord'] as Map<String, dynamic>),
-      weather: (json['weather'] as List<dynamic>?)
-          ?.map((e) => Weather.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      base: json['base'] as String?,
-      main: json['main'] == null
+          : Location.fromJson(json['location'] as Map<String, dynamic>),
+      current: json['current'] == null
           ? null
-          : Main.fromJson(json['main'] as Map<String, dynamic>),
-      visibility: (json['visibility'] as num?)?.toInt(),
-      wind: json['wind'] == null
-          ? null
-          : Wind.fromJson(json['wind'] as Map<String, dynamic>),
-      clouds: json['clouds'] == null
-          ? null
-          : Clouds.fromJson(json['clouds'] as Map<String, dynamic>),
-      dt: (json['dt'] as num?)?.toInt(),
-      sys: json['sys'] == null
-          ? null
-          : Sys.fromJson(json['sys'] as Map<String, dynamic>),
-      timezone: (json['timezone'] as num?)?.toInt(),
-      id: (json['id'] as num?)?.toInt(),
-      name: json['name'] as String?,
-      cod: (json['cod'] as num?)?.toInt(),
+          : Current.fromJson(json['current'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$WeatherModelImplToJson(_$WeatherModelImpl instance) =>
     <String, dynamic>{
-      'coord': instance.coord,
-      'weather': instance.weather,
-      'base': instance.base,
-      'main': instance.main,
-      'visibility': instance.visibility,
-      'wind': instance.wind,
-      'clouds': instance.clouds,
-      'dt': instance.dt,
-      'sys': instance.sys,
-      'timezone': instance.timezone,
-      'id': instance.id,
-      'name': instance.name,
-      'cod': instance.cod,
+      'location': instance.location,
+      'current': instance.current,
     };

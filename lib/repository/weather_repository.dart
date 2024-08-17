@@ -13,7 +13,7 @@ class WeatherRepository {
   Future<WeatherModel> getWeather(String city) async {
     Response response = await _baseRepository.executeRequest(
       RequestType.get,
-      getWeatherCityURl(city),
+      getWeatherUrl(city),
     );
     return WeatherModel.fromJson(response.data);
   }

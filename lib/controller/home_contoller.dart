@@ -22,4 +22,4 @@ final homeControllerProvider =
     return HomeController(null);
   },
 );
-final  homeControllerLoadingProvider = StateProvider<bool>((ref) => false);
+final homeControllerLoadingProvider = StateProvider<bool>((ref) => false);

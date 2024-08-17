@@ -1,11 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'clouds.dart';
-import 'coord.dart';
-import 'main.dart';
-import 'sys.dart';
-import 'weather.dart';
-import 'wind.dart';
+import 'current.dart';
+import 'location.dart';
 
 part 'weather_model.freezed.dart';
 part 'weather_model.g.dart';
@@ -13,19 +9,8 @@ part 'weather_model.g.dart';
 @freezed
 class WeatherModel with _$WeatherModel {
   factory WeatherModel({
-    Coord? coord,
-    List<Weather>? weather,
-    String? base,
-    Main? main,
-    int? visibility,
-    Wind? wind,
-    Clouds? clouds,
-    int? dt,
-    Sys? sys,
-    int? timezone,
-    int? id,
-    String? name,
-    int? cod,
+    Location? location,
+    Current? current,
   }) = _WeatherModel;
 
   factory WeatherModel.fromJson(Map<String, dynamic> json) =>

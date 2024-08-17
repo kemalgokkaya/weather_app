@@ -20,10 +20,12 @@ class MockRepository {
     ) as List;
     List<String> cities = cityData.map((e) => e.toString()).toList();
     return cities
-        .where((e) => e
-            .toString()
-            .toLowerCase()
-            .contains(city.toString().toLowerCase()),)
+        .where(
+          (e) => e
+              .toString()
+              .toLowerCase()
+              .contains(city.toString().toLowerCase()),
+        )
         .toList();
   }
 }
