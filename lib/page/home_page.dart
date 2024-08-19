@@ -11,10 +11,22 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((val) {
+      ref.read(homeControllerLoadingProvider.notifier).state = true;
+      ref.read(homeControllerProvider.notifier).getLocation().then((v) {
+        ref.read(homeControllerLoadingProvider.notifier).state = false;
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final controller = ref.read(homeControllerProvider.notifier);
     final state = ref.watch(homeControllerProvider);
     final loadingState = ref.watch(homeControllerLoadingProvider);
+
     return Stack(
       children: [
         Container(
@@ -76,7 +88,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   builder: (context, controller, focusNode) => TextField(
                     controller: controller,
                     focusNode: focusNode,
-                    autofocus: true,
+                    autofocus: false,
                     style: const TextStyle(color: Colors.white),
                     decoration: const InputDecoration(
                       focusedBorder: InputBorder.none,
@@ -122,56 +134,60 @@ class _HomePageState extends ConsumerState<HomePage> {
                         ),
                         Row(
                           children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              padding: const EdgeInsets.all(10),
-                              width: 180,
-                              height: 250,
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Text(
-                                    "Tarih:"
-                                    "${state?.current?.lastUpdated ?? ""}",
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                padding: const EdgeInsets.all(10),
+                                height: 250,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Text(
+                                      "Tarih:"
+                                      "${state?.current?.lastUpdated ?? ""}",
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                             const SizedBox(
                               width: 30,
                             ),
-                            Container(
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(30.0),
-                                  bottomLeft: Radius.circular(30.0),
-                                ),
-                              ),
-                              padding: const EdgeInsets.all(10),
-                              width: 200,
-                              height: 250,
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Text(
-                                    "Derece(c):"
-                                    "${state?.current?.tempC.toString() ?? ""}",
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                            Expanded(
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(30.0),
+                                    bottomLeft: Radius.circular(30.0),
                                   ),
-                                ],
+                                ),
+                                padding: const EdgeInsets.all(10),
+                                height: 250,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Text(
+                                      "Derece(c):"
+                                      "${state?.current?.tempC.toString() ?? ""}",
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],
@@ -179,106 +195,116 @@ class _HomePageState extends ConsumerState<HomePage> {
                         const SizedBox(height: 15),
                         Row(
                           children: [
-                            Container(
-                              decoration: const BoxDecoration(
-                                color: Color.fromARGB(255, 255, 255, 255),
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(30.0),
-                                  bottomRight: Radius.circular(30.0),
+                            Expanded(
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  color: Color.fromARGB(255, 255, 255, 255),
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(30.0),
+                                    bottomRight: Radius.circular(30.0),
+                                  ),
                                 ),
-                              ),
-                              padding: const EdgeInsets.all(10),
-                              width: 180,
-                              height: 250,
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Text(
-                                    "Hissedilen(c):"
-                                    "${state?.current?.feelslikeC.toString() ?? ""}",
-                                    style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    "Nem(%):"
-                                    "${state?.current?.humidity.toString() ?? ""}",
-                                    style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    "Bulut Orani(%):"
-                                    "${state?.current?.cloud.toString() ?? ""}",
-                                    style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    "Rüzgar Hizi(km):"
-                                    "${state?.current?.windKph.toString() ?? ""}",
-                                    style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
+                                padding: const EdgeInsets.all(10),
+                                height: 250,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Text(
+                                      "Hissedilen(c):"
+                                      "${state?.current?.feelslikeC.toString() ?? ""}",
+                                      style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    Text(
+                                      "Nem(%):"
+                                      "${state?.current?.humidity.toString() ?? ""}",
+                                      style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    Text(
+                                      "Bulut Orani(%):"
+                                      "${state?.current?.cloud.toString() ?? ""}",
+                                      style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    Text(
+                                      "Rüzgar Hizi(km):"
+                                      "${state?.current?.windKph.toString() ?? ""}",
+                                      style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                             const SizedBox(
                               width: 50,
                             ),
-                            Container(
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(30.0),
-                                  bottomLeft: Radius.circular(30.0),
+                            Expanded(
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(30.0),
+                                    bottomLeft: Radius.circular(30.0),
+                                  ),
                                 ),
-                              ),
-                              padding: const EdgeInsets.all(8),
-                              width: 180,
-                              height: 250,
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Text(
-                                    "Rüzgar Sicakliği(c):"
-                                    "${state?.current?.windDegree.toString() ?? ""}",
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    "Yağiş(%):"
-                                    "${state?.current?.precipMm.toString() ?? ""}",
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    "UV:"
-                                    "${state?.current?.uv.toString() ?? ""}",
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    "Basinç Yüksekliği(mb):"
-                                    "${state?.current?.pressureMb.toString() ?? ""}",
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
+                                padding: const EdgeInsets.all(8),
+                                height: 250,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Text(
+                                      "Rüzgar Sicakliği(c):"
+                                      "${state?.current?.windDegree.toString() ?? ""}",
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    Text(
+                                      "Yağiş(%):"
+                                      "${state?.current?.precipMm.toString() ?? ""}",
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    Text(
+                                      "UV:"
+                                      "${state?.current?.uv.toString() ?? ""}",
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    Text(
+                                      "Basinç Yüksekliği(mb):"
+                                      "${state?.current?.pressureMb.toString() ?? ""}",
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],
