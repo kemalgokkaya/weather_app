@@ -35,10 +35,15 @@ class HomeController extends StateNotifier<WeatherModel?> {
     final List<Placemark> placemark =
         await placemarkFromCoordinates(position.latitude, position.longitude);
     final String? city = placemark[0].administrativeArea;
+    final String? country = placemark[0].country;
     if (city == null) {
       return Future.error("Bir sorun oluştu");
     }
-    await getWeather(city);
+    if (country == "Türkiye") {
+      await getWeather(city);
+    } else {
+      await getWeather("İstanbul");
+    }
   }
 }
 
