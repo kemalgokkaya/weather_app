@@ -48,75 +48,58 @@ class _HomePageState extends ConsumerState<HomePage> {
           extendBody: true,
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            centerTitle: true,
-            title: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      state?.location?.name ?? "",
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 25,
-                      ),
-                    ),
-                    Text(
-                      state?.location?.country.toString() ?? "",
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                )),
-          ),
           body: Column(
             children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                margin: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.3),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: TypeAheadField<String>(
-                  builder: (context, controller, focusNode) => TextField(
-                    controller: controller,
-                    focusNode: focusNode,
-                    autofocus: false,
-                    style: const TextStyle(color: Colors.white),
-                    decoration: const InputDecoration(
-                      focusedBorder: InputBorder.none,
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(color: Colors.white),
-                      hintText: "Konumunuzu Giriniz...",
-                    ),
-                  ),
-                  itemBuilder: (context, suggestion) {
-                    return ListTile(
-                      title: Text(suggestion),
-                    );
-                  },
-                  onSelected: (suggestion) {
-                    ref.read(homeControllerLoadingProvider.notifier).state =
-                        true;
-                    controller.getWeather(suggestion.turkishToEnglish).then(
-                      (data) {
-                        ref.read(homeControllerLoadingProvider.notifier).state =
-                            false;
-                      },
-                    );
-                  },
-                  suggestionsCallback: (pattern) async {
-                    return await controller.getCities(city: pattern);
-                  },
-                ),
+              const SizedBox(
+                height: 30,
               ),
+              Container(
+                  padding: const EdgeInsets.all(8),
+                  margin: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    children: [
+                      TypeAheadField<String>(
+                        builder: (context, controller, focusNode) => TextField(
+                          controller: controller,
+                          focusNode: focusNode,
+                          autofocus: false,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: const InputDecoration(
+                            focusedBorder: InputBorder.none,
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(color: Colors.grey),
+                            hintText: "Konumunuzu Giriniz...",
+                          ),
+                        ),
+                        itemBuilder: (context, suggestion) {
+                          return ListTile(
+                            title: Text(suggestion),
+                          );
+                        },
+                        onSelected: (suggestion) {
+                          ref
+                              .read(homeControllerLoadingProvider.notifier)
+                              .state = true;
+                          controller
+                              .getWeather(suggestion.turkishToEnglish)
+                              .then(
+                            (data) {
+                              ref
+                                  .read(homeControllerLoadingProvider.notifier)
+                                  .state = false;
+                            },
+                          );
+                        },
+                        suggestionsCallback: (pattern) async {
+                          return await controller.getCities(city: pattern);
+                        },
+                      ),
+                    ],
+                  )),
               if (loadingState)
                 const Center(
                   child: CircularProgressIndicator(),
@@ -127,190 +110,224 @@ class _HomePageState extends ConsumerState<HomePage> {
                     child: Column(
                       children: [
                         const SizedBox(
-                          height: 15,
-                        ),
-                        const SizedBox(
-                          height: 20,
+                          height: 50,
                         ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Expanded(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                padding: const EdgeInsets.all(10),
-                                height: 250,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Text(
-                                      "Tarih:"
-                                      "${state?.current?.lastUpdated ?? ""}",
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 30,
-                            ),
-                            Expanded(
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(30.0),
-                                    bottomLeft: Radius.circular(30.0),
-                                  ),
-                                ),
-                                padding: const EdgeInsets.all(10),
-                                height: 250,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Text(
-                                      "Derece(c):"
-                                      "${state?.current?.tempC.toString() ?? ""}",
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                            Text(state?.current?.lastUpdated ?? ""),
                           ],
                         ),
-                        const SizedBox(height: 15),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                decoration: const BoxDecoration(
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Column(
+                            children: [
+                              Text(
+                                "${state?.current?.tempC.toString() ?? ""}" "°",
+                                style: const TextStyle(
                                   color: Color.fromARGB(255, 255, 255, 255),
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(30.0),
-                                    bottomRight: Radius.circular(30.0),
-                                  ),
-                                ),
-                                padding: const EdgeInsets.all(10),
-                                height: 250,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Text(
-                                      "Hissedilen(c):"
-                                      "${state?.current?.feelslikeC.toString() ?? ""}",
-                                      style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    Text(
-                                      "Nem(%):"
-                                      "${state?.current?.humidity.toString() ?? ""}",
-                                      style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    Text(
-                                      "Bulut Orani(%):"
-                                      "${state?.current?.cloud.toString() ?? ""}",
-                                      style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    Text(
-                                      "Rüzgar Hizi(km):"
-                                      "${state?.current?.windKph.toString() ?? ""}",
-                                      style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
+                                  fontSize: 55,
                                 ),
                               ),
-                            ),
-                            const SizedBox(
-                              width: 50,
-                            ),
-                            Expanded(
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(30.0),
-                                    bottomLeft: Radius.circular(30.0),
+                              Column(
+                                children: [
+                                  Text(
+                                    state?.location?.name ?? "",
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15,
+                                    ),
                                   ),
-                                ),
-                                padding: const EdgeInsets.all(8),
-                                height: 250,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Text(
-                                      "Rüzgar Sicakliği(c):"
-                                      "${state?.current?.windDegree.toString() ?? ""}",
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold),
-                                      textAlign: TextAlign.center,
+                                  Text(
+                                    state?.location?.country.toString() ?? "",
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 10,
                                     ),
-                                    Text(
-                                      "Yağiş(%):"
-                                      "${state?.current?.precipMm.toString() ?? ""}",
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold),
-                                      textAlign: TextAlign.center,
+                                  ),
+                                  const SizedBox(
+                                    height: 30,
+                                  ),
+                                  Container(
+                                    color: Colors.transparent,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          decoration: const BoxDecoration(
+                                            border: Border(
+                                              right: BorderSide(
+                                                color: Colors.black,
+                                                width: 0.3,
+                                              ),
+                                            ),
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              const Icon(Icons.cloud),
+                                              Text(
+                                                  "% ${state?.current?.cloud.toString() ?? ""}")
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          decoration: const BoxDecoration(
+                                            border: Border(
+                                              right: BorderSide(
+                                                color: Colors.black,
+                                                width: 0.5,
+                                              ),
+                                            ),
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              const Icon(Icons.air),
+                                              Text(
+                                                  " ${state?.current?.windKph?.toString() ?? ""}km/s")
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          decoration: const BoxDecoration(
+                                            border: Border(
+                                              right: BorderSide(
+                                                color: Colors.black,
+                                                width: 0.5,
+                                              ),
+                                            ),
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              const Icon(Icons.compress),
+                                              Text(
+                                                  " ${state?.current?.pressureMb?.toString() ?? ""}/mlb")
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          child: Column(
+                                            children: [
+                                              const Icon(Icons.cloudy_snowing),
+                                              Text(
+                                                  "% ${state?.current?.cloud?.toString() ?? ""}"),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    Text(
-                                      "UV:"
-                                      "${state?.current?.uv.toString() ?? ""}",
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    Text(
-                                      "Basinç Yüksekliği(mb):"
-                                      "${state?.current?.pressureMb.toString() ?? ""}",
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
                         ),
                         const SizedBox(
-                          height: 20,
+                          height: 30,
+                        ),
+                        Container(
+                          decoration: const BoxDecoration(
+                              border: Border(
+                                  top: BorderSide(
+                                      color: Colors.black, width: 0.1))),
+                          height: 300,
+                          margin: const EdgeInsets.only(top: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              const Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Text("Wind Direction "),
+                                  Text("Nem"),
+                                  Text("Sicaklik İndexi"),
+                                  Text("Çiğ Noktosi"),
+                                  Text("Görünürlük Mesafesi"),
+                                  Text("Uv"),
+                                  Text("Rüzgar Hiz Artişi"),
+                                ],
+                              ),
+                              Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  const SizedBox(
+                                    height: 15,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                          "${state?.current?.windDir.toString()}   " ??
+                                              ""),
+                                      const Icon(Icons.near_me),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                          "${state?.current?.humidity.toString()}   " ??
+                                              ""),
+                                      const Icon(Icons.opacity),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                          "${state?.current?.heatindexC.toString()}   " ??
+                                              ""),
+                                      const Icon(Icons.whatshot),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                          "${state?.current?.dewpointC.toString()}   " ??
+                                              ""),
+                                      const Icon(Icons.dew_point),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                          "${state?.current?.visKm.toString()}   " ??
+                                              ""),
+                                      const Icon(Icons.visibility),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Text("${state?.current?.uv.toString()}   " ??
+                                          ""),
+                                      const Icon(Icons.sunny),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text("${state?.current?.uv.toString()}   "
+                                         ?? ""),
+                                      const Icon(Icons.emergency),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
                         )
                       ],
                     ),
