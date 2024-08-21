@@ -115,7 +115,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Text(state?.current?.lastUpdated ?? ""),
+                            Text(
+                              state?.current?.lastUpdated ?? "",
+                              style: const TextStyle(
+                                  color: Color.fromARGB(255, 7, 39, 68)),
+                            ),
                           ],
                         ),
                         Container(
@@ -127,7 +131,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                               Text(
                                 "${state?.current?.tempC.toString() ?? ""}" "°",
                                 style: const TextStyle(
-                                  color: Color.fromARGB(255, 255, 255, 255),
+                                  color: Color.fromARGB(255, 7, 39, 68),
                                   fontSize: 55,
                                 ),
                               ),
@@ -252,7 +256,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                   SizedBox(
                                     height: 15,
                                   ),
-                                  Text("Wind Direction "),
+                                  Text("Rüzgar Yönü"),
                                   Text("Nem"),
                                   Text("Sicaklik İndexi"),
                                   Text("Çiğ Noktosi"),
@@ -312,15 +316,17 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
                                     children: [
-                                      Text("${state?.current?.uv.toString()}   " ??
-                                          ""),
+                                      Text(
+                                          "${state?.current?.uv.toString()}   " ??
+                                              ""),
                                       const Icon(Icons.sunny),
                                     ],
                                   ),
                                   Row(
                                     children: [
-                                      Text("${state?.current?.uv.toString()}   "
-                                         ?? ""),
+                                      Text(
+                                          "${state?.current?.uv.toString()}   " ??
+                                              ""),
                                       const Icon(Icons.emergency),
                                     ],
                                   )
